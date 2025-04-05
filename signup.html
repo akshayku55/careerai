@@ -178,7 +178,8 @@
     <a href="#">Privacy</a>
   </footer>
 
-  <script>
+ <script>
+  window.onload = function () {
     document.getElementById("signupForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
@@ -187,7 +188,7 @@
       const password = document.getElementById("password").value.trim();
       const msgBox = document.getElementById("signupMsg");
 
-      const res = await fetch("http://localhost:3000/api/auth/signup", {
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -204,6 +205,8 @@
         msgBox.style.color = "red";
       }
     });
-  </script>
+  };
+</script>
+
 </body>
 </html>
