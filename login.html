@@ -94,34 +94,33 @@
   </footer>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
+    window.onload = function () {
+      document.getElementById("loginForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const msgBox = document.getElementById("loginMsg");
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const msgBox = document.getElementById("loginMsg");
 
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          localStorage.setItem("careerai_token", data.token);
+          msgBox.textContent = "✅ Login successful! Redirecting...";
+          msgBox.style.color = "green";
+          setTimeout(() => window.location.href = "index.html", 1500);
+        } else {
+          msgBox.textContent = `❌ ${data.message || "Login failed."}`;
+          msgBox.style.color = "red";
+        }
       });
-
-      const data = await res.json();
-
-      if (res.ok && data.token) {
-        // Store token under "careerai_token"
-        localStorage.setItem("careerai_token", data.token);
-        msgBox.textContent = "✅ Login successful! Redirecting...";
-        msgBox.style.color = "green";
-        setTimeout(() => window.location.href = "index.html", 1500);
-      } else {
-        msgBox.textContent = `❌ ${data.message || "Login failed."}`;
-        msgBox.style.color = "red";
-      }
-    });
+    };
   </script>
-
-
 </body>
 </html>
