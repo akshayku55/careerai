@@ -1,0 +1,6 @@
+.env
+node_moduls/
+uploads/
+.firebase/
+firebase.json
+.firebasesrc

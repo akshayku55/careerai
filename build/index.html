@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CareerAI - Virtual Career Advisor</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <!-- AOS CSS for scroll animations -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" integrity="sha512-Ho5LYw6Gphim8oXbnkaIMch4cJEIqqM+56I1PSzT9DSUtFNdymjv7tiW2QTRqu3flXX5F2W1QWkHkZ8XmpZdXA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --font: 'Inter', sans-serif;
+      --primary1: #2e5ee0;
+      --primary2: #6ca0ff;
+      --accent: #f7f9fc;
+      --text-dark: #1e1e1e;
+      --text-light: #6c757d;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: var(--font);
+      background-color: #fff;
+      color: var(--text-dark);
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      background: #f9f9f9;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10000;
+    }
+    .navbar a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      margin-left: 1.5rem;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+    .navbar a:hover {
+      border-bottom: 2px solid var(--primary1);
+    }
+
+    /* ===== HEADER / HERO ===== */
+    header {
+      position: relative;
+      padding: 6rem 1rem 3rem;
+      text-align: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary1), var(--primary2));
+      overflow: hidden;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -120px;
+      right: -120px;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(30px); }
+    }
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      color: #f0f0f0;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #fff;
+      color: var(--primary1);
+      padding: 0.8rem 1.6rem;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+    .btn:hover {
+      background-color: #eef2f9;
+      transform: translateY(-3px);
+    }
+    .wave {
+      position: relative;
+      height: 60px;
+      margin-top: -60px;
+      background: #fff;
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+
+    /* ===== SECTIONS ===== */
+    section {
+      padding: 4rem 1rem;
+      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    section h2 {
+      font-size: 2.4rem;
+      color: var(--primary1);
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+    }
+    .steps, .features {
+      display: grid;
+      grid-gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .step, .feature {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .step:hover, .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+    .step-icon, .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--primary1);
+    }
+    .step h3, .feature h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+    .step p, .feature p {
+      font-size: 1rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    .testimonials {
+      background: var(--accent);
+      padding: 4rem 1rem;
+    }
+    .testimonial-list {
+      display: grid;
+      grid-gap: 2rem;
+      max-width: 800px;
+      margin: 2rem auto 0;
+    }
+    .testimonial-list p {
+      position: relative;
+      font-style: italic;
+      color: var(--text-dark);
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+    .testimonial-list p::before {
+      content: "“";
+      position: absolute;
+      font-size: 3rem;
+      color: var(--primary1);
+      top: -10px;
+      left: 10px;
+    }
+    .testimonial-list p::after {
+      content: "”";
+      position: absolute;
+      font-size: 3rem;
+      color: var(--primary1);
+      bottom: -20px;
+      right: 10px;
+    }
+
+    /* ===== TOOLS & RESOURCES ===== */
+    .tools {
+      padding: 4rem 1rem;
+      background: #f7f9fc;
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .tool-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+    .tool-card h3 {
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+    }
+    .tool-card p {
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    /* ===== CALL TO ACTION ===== */
+    .call-to-action {
+      margin-top: 3rem;
+    }
+    .call-to-action button.btn {
+      margin: 2rem auto 0;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: linear-gradient(135deg, var(--primary2), var(--primary1));
+      color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.5rem;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease;
+    }
+    footer a:hover {
+      border-bottom: 1px solid #fff;
+    }
+
+    /* ===== DARK MODE ===== */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode header {
+      background: linear-gradient(135deg, #1e1e1e, #3c3c3c);
+      color: #f0f0f0;
+    }
+    body.dark-mode header p {
+      color: #ccc;
+    }
+    body.dark-mode .step,
+    body.dark-mode .feature,
+    body.dark-mode .testimonial-list p,
+    body.dark-mode .tool-card {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+    }
+    body.dark-mode .step p,
+    body.dark-mode .feature p,
+    body.dark-mode .tool-card p {
+      color: #bbb;
+    }
+    body.dark-mode .btn {
+      background-color: #333;
+      color: #fff;
+    }
+    body.dark-mode .btn:hover {
+      background-color: #444;
+    }
+    body.dark-mode h2 {
+      color: #90caf9;
+    }
+    body.dark-mode .testimonials {
+      background-color: #222;
+    }
+    body.dark-mode footer {
+      background: #1e1e1e;
+      color: #ccc;
+    }
+    body.dark-mode footer a {
+      color: #90caf9;
+    }
+
+    /* ===== THEME TOGGLE ===== */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 11000;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px; 
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0; 
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px; 
+      width: 18px;
+      left: 4px; 
+      bottom: 4px;
+      background-color: #fff;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #2196f3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    /* ===== CHAT MODAL ===== */
+    .chat-modal-overlay {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center; 
+      align-items: center;
+      z-index: 12000;
+    }
+    .chat-modal {
+      background: #f2f3f5;
+      width: 90%; 
+      max-width: 600px;
+      height: 70vh;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.2);
+    }
+    .chat-header {
+      background: var(--primary1);
+      color: #fff;
+      padding: 1rem;
+      font-weight: 600;
+      display: flex; 
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-close {
+      cursor: pointer;
+      font-size: 1.2rem;
+      border: none; 
+      background: transparent;
+      color: #fff;
+    }
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex; 
+      flex-direction: column;
+    }
+    .message {
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+    .user-msg {
+      align-self: flex-end;
+      background: #2e5ee0;
+      color: white;
+    }
+    .bot-msg {
+      align-self: flex-start;
+      background: #e1e1e1;
+      color: #000;
+    }
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    .chat-input-area input {
+      flex: 1;
+      padding: 1rem;
+      font-size: 1rem;
+      border: none; 
+      outline: none;
+    }
+    .chat-input-area button {
+      padding: 1rem;
+      font-size: 1rem;
+      background: var(--primary1);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .chat-input-area button:hover {
+      background: #1c47c5;
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" data-aos="fade-down">
+    <a href="signup.html" id="signupLink">Sign Up</a>
+    <a href="login.html" id="loginLink">Login</a>
+    <a href="learn.html">Learn & Grow</a>
+    <a href="resume.html">Resume Analyzer</a>
+  </nav>
+
+  <!-- ===== HEADER / HERO ===== -->
+  <header data-aos="fade-up">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+      <label class="switch">
+        <input type="checkbox" id="theme-switch">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <h1>Find Your Future. Powered by AI.</h1>
+    <p>Discover your ideal career path, get personalized advice, and build your future with our intelligent virtual career advisor.</p>
+    <button class="btn" onclick="openChatModal()">Chat with CareerAI</button>
+  </header>
+  <div class="wave"></div>
+
+  <!-- ===== HOW IT WORKS ===== -->
+  <section data-aos="fade-up">
+    <h2>How It Works</h2>
+    <div class="steps" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="step" data-aos="fade-up" data-aos-delay="100">
+        <div class="step-icon">🧠</div>
+        <h3>Step 1</h3>
+        <p>Answer questions about your interests and goals</p>
+      </div>
+      <div class="step" data-aos="fade-up" data-aos-delay="200">
+        <div class="step-icon">📊</div>
+        <h3>Step 2</h3>
+        <p>Get tailored career suggestions instantly</p>
+      </div>
+      <div class="step" data-aos="fade-up" data-aos-delay="300">
+        <div class="step-icon">📚</div>
+        <h3>Step 3</h3>
+        <p>Learn what skills and courses you need</p>
+      </div>
+      <div class="step" data-aos="fade-up" data-aos-delay="400">
+        <div class="step-icon">🎯</div>
+        <h3>Step 4</h3>
+        <p>Start building your dream future</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES ===== -->
+  <section data-aos="fade-up">
+    <h2>Your Smart Career Companion</h2>
+    <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="feature" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon">💬</div>
+        <h3>AI Chatbot Guidance</h3>
+        <p>Chat 24/7 with your virtual career coach</p>
+      </div>
+      <div class="feature" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon">🎓</div>
+        <h3>Personalized Learning Paths</h3>
+        <p>Get courses and certifications suggestions</p>
+      </div>
+      <div class="feature" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon">📄</div>
+        <h3>Resume & Interview Help</h3>
+        <p>Tips, templates, and mock questions</p>
+      </div>
+      <div class="feature" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon">🚀</div>
+        <h3>Goal Tracking</h3>
+        <p>Keep track of your progress</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIALS ===== -->
+  <section class="testimonials" data-aos="fade-up">
+    <h2>Helping Thousands Take the First Step</h2>
+    <div class="testimonial-list">
+      <p>“I was lost after college, but this site showed me the way.” – Ritika, Student</p>
+      <p>“The AI coach helped me land my first job!” – Ajay, Graduate</p>
+    </div>
+  </section>
+
+  <!-- ===== TOOLS & RESOURCES ===== -->
+  <section class="tools" data-aos="fade-up">
+    <h2>Explore More Tools & Resources</h2>
+    <div class="tools-grid">
+      <div class="tool-card" data-aos="fade-up" data-aos-delay="100">
+        <h3>Learn & Grow</h3>
+        <p>Take the next step to skill up in your chosen career. Access curated courses, YouTube tutorials, and more!</p>
+        <a href="learn.html" class="btn">Explore Skills</a>
+      </div>
+      <div class="tool-card" data-aos="fade-up" data-aos-delay="200">
+        <h3>Resume Analyzer</h3>
+        <p>Get AI-driven suggestions to improve your resume, highlight your strengths, and stand out to recruiters.</p>
+        <a href="resume.html" class="btn">Boost Resume</a>
+      </div>
+      <div class="tool-card" data-aos="fade-up" data-aos-delay="300">
+        <h3>Career Quiz</h3>
+        <p>Answer a short, personalized quiz to discover career paths that match your interests and strengths.</p>
+        <a href="quiz.html" class="btn">Take the Quiz</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CALL TO ACTION ===== -->
+  <section class="call-to-action" data-aos="fade-up">
+    <h2>Ready to Discover Your Future?</h2>
+    <a href="quiz.html" class="btn">Start Career Quiz</a>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer data-aos="fade-up">
+    &copy; 2025 CareerAI. All rights reserved.
+    <br>
+    <a href="#">About</a> | <a href="#">Contact</a> | <a href="#">Privacy Policy</a>
+  </footer>
+
+  <!-- ===== CHAT MODAL ===== -->
+  <div class="chat-modal-overlay" id="chatModalOverlay">
+    <div class="chat-modal" id="chatModal">
+      <div class="chat-header">
+        <span>CareerAI Chat</span>
+        <button class="chat-close" onclick="closeChatModal()">✕</button>
+      </div>
+      <div class="chat-container" id="chatContainer"></div>
+      <div class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Ask CareerAI anything..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DARK MODE SCRIPT ===== -->
+  <script>
+  // Hide Login/Signup if user is logged in
+  document.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('careerai_token'); // your actual key
+    if (token) {
+      const signupLink = document.getElementById('signupLink');
+      const loginLink = document.getElementById('loginLink');
+      if (signupLink) signupLink.style.display = 'none';
+      if (loginLink) loginLink.style.display = 'none';
+    }
+  });
+    const themeSwitch = document.getElementById('theme-switch');
+    const body = document.body;
+    if (localStorage.getItem('dark-mode') === 'enabled') {
+      body.classList.add('dark-mode');
+      themeSwitch.checked = true;
+    }
+    themeSwitch.addEventListener('change', () => {
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('dark-mode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+    });
+  </script>
+
+  <!-- ===== AI CHAT SCRIPT ===== -->
+  <script>
+    const chatModalOverlay = document.getElementById('chatModalOverlay');
+    const chatContainer = document.getElementById('chatContainer');
+    const chatInput = document.getElementById('chatInput');
+    let hasGreeted = false;
+    function openChatModal() {
+      chatModalOverlay.style.display = 'flex';
+      if (!hasGreeted) {
+        addMessage("bot-msg", "👋 Hey! I'm CareerAI. Ask me about careers, skills, or anything about your future!");
+        hasGreeted = true;
+      }
+    }
+    function closeChatModal() {
+      chatModalOverlay.style.display = 'none';
+    }
+    function addMessage(role, text) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", role);
+      msg.innerHTML = text;
+      chatContainer.appendChild(msg);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    async function sendMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+      addMessage("user-msg", message);
+      chatInput.value = "";
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        addMessage("bot-msg", data.reply);
+      } catch (err) {
+        addMessage("bot-msg", "Sorry, I couldn't connect to the server.");
+        console.error(err);
+      }
+    }
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+
+  <!-- ===== INITIALIZE AOS ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" integrity="sha512-pQnGH0Nffy+ilsmU7X7+HQsZt8KPUwMoqhL5n/V8b6cOLb5Ub5uXlIfwvd7rmMjHZvbM9OW+5ghMKUlY2KhmKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true,
+    });
+  </script>
+
+  <!-- ===== WATERMARK WITH DVD EFFECT ===== -->
+  <<style>
+    @keyframes dvdBounce {
+      0%   { top: 0; left: 0; color: rgba(0,0,0,0.3); }
+      25%  { top: 0; left: calc(100% - 200px); color: rgba(0,0,255,0.3); }
+      50%  { top: calc(100% - 100px); left: calc(100% - 200px); color: rgba(0,255,0,0.3); }
+      75%  { top: calc(100% - 100px); left: 0; color: rgba(255,0,0,0.3); }
+      100% { top: 0; left: 0; color: rgba(0,0,0,0.3); }
+    }
+    .watermark {
+      position: fixed;
+      top: 0;
+      left: 0;
+      font-size: 2rem; /* Lowered size */
+      transform: rotate(0deg);
+      pointer-events: none;
+      user-select: none;
+      z-index: 9999;
+      animation: dvdBounce 10s linear infinite;
+    }
+  </style>
+  <div class="watermark">
+   Akshay-2338393
+   Aman - 2338396
+  </div>
+  </style>
+  <div class="watermark">
+   Akshay-2338393
+   Aman - 2338396
+  </div>
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXqXNwq4EcmkScdmiiAZcrdR9i7ACf6wo",
+      authDomain: "careerai-d9740.firebaseapp.com",
+      projectId: "careerai-d9740",
+      storageBucket: "careerai-d9740.firebasestorage.app",
+      messagingSenderId: "796943438047",
+      appId: "1:796943438047:web:9786f592620d8a47dbd96a",
+      measurementId: "G-4F7KCHRL5K"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+  
+</body>
+</html>

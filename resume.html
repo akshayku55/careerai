@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume Analyzer - CareerAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Using Google Fonts to match previous design -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --font: 'Inter', sans-serif;
+      --primary1: #2e5ee0; /* brand color 1 */
+      --primary2: #6ca0ff; /* brand color 2 */
+      --accent: #f7f9fc;
+      --text-dark: #1e1e1e;
+      --shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background-color: #fff;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    /* ===== HEADER / HERO ===== */
+    header {
+      position: relative;
+      padding: 3rem 1rem;
+      text-align: center;
+      background: linear-gradient(135deg, var(--primary1), var(--primary2));
+      color: #fff;
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+      overflow: hidden;
+    }
+    header h1 {
+      font-size: 2.4rem;
+      margin-bottom: 1rem;
+    }
+    header p {
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto;
+      color: #f0f0f0;
+      line-height: 1.7;
+    }
+
+    /* wave after header */
+    .wave {
+      position: relative;
+      height: 50px;
+      margin-top: -50px;
+      background: #fff;
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+    }
+
+    /* ===== MAIN CONTAINER ===== */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+      text-align: center;
+    }
+    main h2 {
+      font-size: 1.8rem;
+      color: var(--primary1);
+      margin-bottom: 1rem;
+    }
+    .desc {
+      font-size: 1rem;
+      color: #6c757d;
+      max-width: 700px;
+      margin: 0.5rem auto 2rem;
+      line-height: 1.6;
+    }
+
+    /* ===== UPLOAD SECTION ===== */
+    .upload-section {
+      background: #fff;
+      box-shadow: var(--shadow);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 700px;
+      margin: 2rem auto;
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+    .upload-section:hover {
+      background-color: #f7faff;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      color: var(--primary2);
+      margin-bottom: 1rem;
+    }
+    .upload-text {
+      font-size: 1rem;
+      color: var(--text-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    /* DRAG & DROP BOX */
+    .drag-drop {
+      border: 2px dashed var(--primary1);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1rem 0;
+      background: #fafcff;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    .drag-drop.dragover {
+      background: #eef3ff;
+      border-color: var(--primary2);
+    }
+    .drag-drop p {
+      color: #777;
+      font-size: 0.95rem;
+    }
+    .drag-drop span {
+      color: var(--primary1);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #resumeInput {
+      display: none;
+    }
+
+    /* ANALYZE BUTTON */
+    .analyze-btn {
+      display: inline-block;
+      background: var(--primary1);
+      color: #fff;
+      padding: 0.8rem 1.6rem;
+      border: none;
+      border-radius: 24px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    .analyze-btn:hover {
+      background: #1c47c5;
+      transform: translateY(-2px);
+    }
+
+    /* FILE NAME PREVIEW */
+    .file-name {
+      margin: 1rem 0;
+      font-size: 0.9rem;
+      color: #666;
+      word-break: break-all;
+    }
+
+    /* STEPS / INFO SECTION */
+    .info-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 800px;
+      margin: 4rem auto 0;
+    }
+    .step-card {
+      background: #fff;
+      box-shadow: var(--shadow);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: transform 0.3s;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+    }
+    .step-num {
+      background: var(--primary2);
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .step-content h3 {
+      font-size: 1.1rem;
+      color: var(--primary1);
+      margin-bottom: 0.3rem;
+    }
+    .step-content p {
+      color: #777;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* ===== LOADING SCREEN ===== */
+    .loading-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0; /* hidden by default */
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .loading-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .loading-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      width: 300px;
+      animation: fadeInUp 0.5s both;
+    }
+    .spinner {
+      margin: 0 auto 1rem;
+      width: 50px; height: 50px;
+      border: 6px solid #ccc;
+      border-top: 6px solid var(--primary1);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    .loading-text {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* ===== ANALYSIS RESULT BOX ===== */
+    .analysis-result {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: #f7f9fc;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      display: none; /* hidden by default */
+      opacity: 0; /* for fade-in animation */
+      animation: fadeResult 0.6s forwards; /* define animation below */
+    }
+    @keyframes fadeResult {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .analysis-result h3 {
+      color: var(--primary1);
+      margin-bottom: 1rem;
+    }
+    .analysis-text {
+      white-space: pre-wrap; 
+      text-align: left; 
+      line-height: 1.4; 
+      font-size: 0.95rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--primary2);
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 0.5rem;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.2s ease;
+    }
+    footer a:hover {
+      border-bottom: 1px solid #fff;
+    }
+
+    /* MEDIA QUERIES */
+    @media (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      .upload-section {
+        margin: 1rem;
+      }
+      .info-steps { margin-top: 2rem; }
+      .step-card { flex-direction: column; text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ========== HEADER / HERO ========== -->
+  <header>
+    <h1>Resume Analyzer</h1>
+    <p>Upload your resume and let our advanced AI (GPT-4o) provide detailed feedback, suggestions, and career insights!</p>
+  </header>
+  <div class="wave"></div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <h2>Let’s Make Your Resume Shine!</h2>
+    <p class="desc">
+      Our AI-powered analyzer will highlight strengths, identify weaknesses, and suggest improvements based on your resume content.
+      From structure and format to relevant skills — we’ve got you covered.
+    </p>
+
+    <!-- ========== UPLOAD SECTION ========== -->
+    <div class="upload-section">
+      <div class="upload-icon">📄</div>
+      <div class="upload-text">
+        Drag & Drop Your Resume Here or
+        <span onclick="document.getElementById('resumeInput').click()">Browse</span>
+      </div>
+
+      <!-- Drag & Drop area -->
+      <div class="drag-drop" id="dragDropArea" onclick="document.getElementById('resumeInput').click()">
+        <p>
+          <span>Click to upload</span> or drag file here.<br>
+          Supported formats: PDF, DOCX, TXT
+        </p>
+      </div>
+
+      <!-- Hidden file input -->
+      <input type="file" id="resumeInput" accept=".pdf,.doc,.docx,.txt" onchange="onFileSelected()" />
+
+      <!-- File name preview -->
+      <div class="file-name" id="fileNamePreview" style="display:none;"></div>
+
+      <!-- Analyze Button -->
+      <button class="analyze-btn" onclick="analyzeResume()" id="analyzeBtn" style="display:none;">Analyze Resume</button>
+    </div>
+
+    <!-- Steps / Info Section -->
+    <div class="info-steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>Upload</h3>
+          <p>Drag & drop or browse your resume file. GPT-4o will parse the text to understand your background.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>Wait for Analysis</h3>
+          <p>Our AI scours your resume for key insights, checks structure and relevance, and identifies possible improvements.</p>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>Get Recommendations</h3>
+          <p>Please Upload Only REAL PDF (no converted pdf), from grammar tweaks to skills suggestions, plus personalized role recommendations.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== LOADING OVERLAY ========== -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-box">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing your resume...</div>
+      </div>
+    </div>
+
+    <!-- ========== ANALYSIS RESULT ========== -->
+    <div class="analysis-result" id="analysisResult">
+      <h3>🧠 Resume Analysis</h3>
+      <div class="analysis-text" id="analysisText"></div>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    &copy; 2025 CareerAI. All rights reserved.<br>
+    <a href="index.html">Home</a> | <a href="signup.html">Sign Up</a> | <a href="login.html">Login</a>
+  </footer>
+
+  <script>
+    const dragDropArea = document.getElementById("dragDropArea");
+    const fileNamePreview = document.getElementById("fileNamePreview");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const analysisResult = document.getElementById("analysisResult");
+    const analysisText = document.getElementById("analysisText");
+
+    let selectedFile = null;
+
+    // ===== DRAG & DROP
+    dragDropArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dragDropArea.classList.add("dragover");
+    });
+    dragDropArea.addEventListener("dragleave", () => {
+      dragDropArea.classList.remove("dragover");
+    });
+    dragDropArea.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dragDropArea.classList.remove("dragover");
+      selectedFile = e.dataTransfer.files[0];
+      document.getElementById("resumeInput").files = e.dataTransfer.files;
+      onFileSelected();
+    });
+
+    function onFileSelected() {
+      const fileInput = document.getElementById("resumeInput");
+      if (fileInput.files.length > 0) {
+        selectedFile = fileInput.files[0];
+        fileNamePreview.style.display = "block";
+        fileNamePreview.textContent = "File: " + selectedFile.name;
+        analyzeBtn.style.display = "inline-block";
+      }
+    }
+
+    async function analyzeResume() {
+      if (!selectedFile) {
+        alert("Please select a resume file first!");
+        return;
+      }
+      showLoading();
+
+      // For PDF, DOCX, etc. – send file to backend
+      const formData = new FormData();
+      formData.append("resume", selectedFile);
+
+      try {
+        const res = await fetch("/api/analyze-resume/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        hideLoading();
+
+        if (res.ok) {
+          showAnalysis(data.analysis);
+        } else {
+          alert("❌ Error: " + (data.error || "Resume analysis failed."));
+        }
+      } catch (err) {
+        hideLoading();
+        console.error("❌ Error analyzing resume:", err);
+        alert("Failed to analyze resume.");
+      }
+    }
+
+    // ===== LOADING SCREEN
+    function showLoading() {
+      loadingOverlay.classList.add("show"); // triggers CSS transitions
+    }
+    function hideLoading() {
+      loadingOverlay.classList.remove("show");
+    }
+
+    // ===== SHOW ANALYSIS
+    function showAnalysis(text) {
+      // Clear old text
+      analysisText.innerHTML = text;
+      // Show the analysis result box
+      analysisResult.style.display = "block";
+      // Re-trigger the fade animation
+      analysisResult.style.animation = "none";
+      // Force reflow
+      void analysisResult.offsetWidth;
+      // re-apply animation
+      analysisResult.style.animation = "fadeResult 0.6s forwards";
+      window.scrollTo({ top: analysisResult.offsetTop, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

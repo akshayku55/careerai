@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Learn & Grow - CareerAI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom spinner keyframe */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="font-['Inter'] bg-white text-gray-800">
+  <!-- HEADER -->
+  <header class="bg-gradient-to-br from-blue-700 to-blue-500 text-white text-center py-16 px-4 clip-path-custom">
+    <h1 class="text-4xl font-bold mb-4">📚 Learn & Grow</h1>
+    <p class="text-lg max-w-2xl mx-auto">Explore essential skills, tools, and curated resources to grow your career in top trending roles.</p>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-5xl mx-auto my-12 px-4">
+    
+    <!-- FETCH SECTION -->
+    <section class="mb-12 text-center">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-4">Find Skills & YouTube Tutorials</h2>
+      <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <input
+          type="text"
+          id="careerInput"
+          placeholder="e.g. Data Scientist"
+          class="career-input border border-gray-300 rounded-lg py-2 px-4 w-60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button id="fetchBtn" class="fetch-button bg-blue-700 hover:bg-blue-800 text-white rounded-lg py-2 px-6 font-semibold transition">
+          Fetch
+        </button>
+        <span id="spinner" class="spinner border-4 border-t-4 border-gray-300 border-t-blue-700 w-6 h-6 rounded-full inline-block animate-spin hidden"></span>
+      </div>
+    </section>
+
+    <!-- DYNAMIC SKILLS SECTION -->
+    <section id="skillsSection" class="mb-12 hidden">
+      <h2 class="text-2xl font-semibold text-blue-700 text-center mb-6">Recommended Skills</h2>
+      <div id="skillsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Skill cards will be injected here -->
+      </div>
+    </section>
+
+    <!-- DYNAMIC YOUTUBE VIDEOS SECTION -->
+    <section id="videosSection" class="mb-12 hidden">
+      <h2 class="text-2xl font-semibold text-blue-700 text-center mb-6">Recommended YouTube Videos</h2>
+      <div id="videosGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Video cards will be injected here -->
+      </div>
+    </section>
+
+    <!-- STATIC: TRENDING CAREERS -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold text-blue-700 text-center mb-6">🔥 Trending Careers</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">👨‍💻</div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">Full Stack Developer</h3>
+          <p class="text-gray-600">Learn HTML, CSS, JavaScript, React, Node.js, Express, MongoDB. Build real-world projects and portfolios.</p>
+        </div>
+        <div class="card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">🤖</div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">AI/ML Engineer</h3>
+          <p class="text-gray-600">Master Python, NumPy, Pandas, TensorFlow, ML concepts, and work with datasets and models.</p>
+        </div>
+        <div class="card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">📱</div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">Mobile App Developer</h3>
+          <p class="text-gray-600">Focus on Flutter, React Native or Kotlin. Build cross-platform apps with great UX and performance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATIC: RECOMMENDED LEARNING PLATFORMS -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-semibold text-blue-700 text-center mb-6">🎓 Recommended Learning Platforms</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">📘</div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">Coursera</h3>
+          <p class="text-gray-600">University-level courses on Computer Science, AI, and Cloud. Explore top certificates from industry leaders.</p>
+        </div>
+        <div class="card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">💡</div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">Udemy</h3>
+          <p class="text-gray-600">Affordable and practical courses like "MERN Stack Mastery" or "Python for Data Science".</p>
+        </div>
+        <div class="card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+          <div class="text-4xl mb-4">⚙️</div>
+          <h3 class="text-xl font-bold text-blue-700 mb-2">freeCodeCamp</h3>
+          <p class="text-gray-600">Free interactive learning in Web Dev, JavaScript, APIs, and certifications. Great for beginners!</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-blue-600 text-white text-center py-4">
+    &copy; 2025 CareerAI — Empowering careers with intelligence.
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const fetchBtn = document.getElementById('fetchBtn');
+    const careerInput = document.getElementById('careerInput');
+    const spinner = document.getElementById('spinner');
+
+    const skillsSection = document.getElementById('skillsSection');
+    const skillsGrid = document.getElementById('skillsGrid');
+
+    const videosSection = document.getElementById('videosSection');
+    const videosGrid = document.getElementById('videosGrid');
+
+    fetchBtn.addEventListener('click', async () => {
+      const career = careerInput.value.trim();
+      if (!career) {
+        alert('Please enter a career name.');
+        return;
+      }
+
+      // Show spinner
+      spinner.classList.remove('hidden');
+      
+      // Clear previous results
+      skillsGrid.innerHTML = '';
+      videosGrid.innerHTML = '';
+      skillsSection.classList.add('hidden');
+      videosSection.classList.add('hidden');
+
+      try {
+        // --- Fetch skills ---
+        const skillsRes = await fetch(`/api/skills?career=${encodeURIComponent(career)}`);
+        const skillsData = await skillsRes.json();
+
+        if (skillsData && Array.isArray(skillsData)) {
+          skillsSection.classList.remove('hidden');
+          skillsData.forEach(skill => {
+            const card = document.createElement('div');
+            card.className = 'card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition';
+            card.innerHTML = `
+              <h3 class="text-xl font-bold text-blue-700 mb-2">${skill.name}</h3>
+              <p class="text-gray-600">${skill.description}</p>
+            `;
+            skillsGrid.appendChild(card);
+          });
+        }
+
+        // --- Fetch YouTube videos ---
+        const videosRes = await fetch(`/api/videos?career=${encodeURIComponent(career)}`);
+        const videosData = await videosRes.json();
+
+        if (videosData && Array.isArray(videosData)) {
+          videosSection.classList.remove('hidden');
+          videosData.forEach(video => {
+            const card = document.createElement('div');
+            card.className = 'card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition';
+            card.innerHTML = `
+              <img 
+                src="https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg" 
+                alt="Thumbnail" 
+                class="w-full rounded-lg mb-4"
+              >
+              <h3 class="text-xl font-bold text-blue-700 mb-2">${video.title}</h3>
+              <p class="text-gray-600 text-sm mb-2">${video.description}</p>
+              <p class="text-gray-600 text-sm"><strong>Channel:</strong> ${video.channelTitle}</p>
+              <a 
+                href="https://www.youtube.com/watch?v=${video.videoId}" 
+                target="_blank" 
+                class="text-blue-700 font-semibold hover:underline inline-block mt-2"
+              >
+                ▶️ Watch on YouTube
+              </a>
+            `;
+            videosGrid.appendChild(card);
+          });
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert('Error fetching data. Check console for details.');
+      } finally {
+        // Hide spinner
+        spinner.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
